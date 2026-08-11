@@ -94,6 +94,34 @@
     requestAnimationFrame(() => { onScroll(); ticking = false; });
   }, { passive: true });
 
+  /* ---------------- Marquee ----------------
+     Rellenamos el track hasta cubrir el doble del ancho de la ventana y
+     después lo duplicamos: así el translateX(-50%) empalma sin huecos
+     por más ancha que sea la pantalla. */
+  const track = $('#marqueeTrack');
+
+  function fillMarquee() {
+    const base = track.firstElementChild;
+    if (!base) return;
+    track.innerHTML = '';
+    track.appendChild(base);
+
+    const objetivo = Math.max(window.innerWidth * 2, 2600);
+    let guard = 0;
+    while (track.scrollWidth < objetivo && guard++ < 40) {
+      track.appendChild(base.cloneNode(true));
+    }
+    // Segunda mitad idéntica para que el loop empalme.
+    Array.from(track.children).forEach((g) => track.appendChild(g.cloneNode(true)));
+  }
+  fillMarquee();
+
+  let resizeT;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(fillMarquee, 200);
+  });
+
   /* ---------------- Manifiesto ---------------- */
   const mBody = $('#manifiestoBody');
   MANIFIESTO.forEach((linea, i) => {

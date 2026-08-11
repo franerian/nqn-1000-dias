@@ -166,13 +166,13 @@ a{ color:inherit; }
 }
 .hero__title{
   margin:0; font-weight:800; letter-spacing:-.035em; color:var(--crema);
-  font-size:clamp(2.7rem, 8.5vw, 6.6rem); line-height:.95;
+  font-size:clamp(2.9rem, 10vw, 7.7rem); line-height:.92;
 }
 .hero__title .line{ display:block; }
 .hero__title em{ font-style:normal; }
 .hero__sub{
   color:var(--crema); font-size:clamp(1rem,1.6vw,1.22rem);
-  max-width:38ch; margin:28px 0 0; opacity:.9;
+  max-width:52ch; margin:26px 0 0; opacity:.9;
 }
 .hero__actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:38px; }
 
@@ -205,12 +205,15 @@ a{ color:inherit; }
   padding:14px 0; overflow:hidden; white-space:nowrap;
 }
 .marquee__track{
-  display:inline-flex; gap:26px; align-items:center;
-  font-weight:800; font-size:clamp(1rem,2vw,1.5rem); letter-spacing:-.01em;
-  animation:slide 26s linear infinite;
+  display:flex; width:max-content;
+  animation:slide 30s linear infinite;
 }
-.marquee__track b{ opacity:.5; font-weight:400; }
-@keyframes slide{ to{ transform:translateX(-50%); } }
+.marquee__group{
+  display:flex; gap:26px; align-items:center; flex:none; padding-right:26px;
+  font-weight:800; font-size:clamp(1rem,2vw,1.5rem); letter-spacing:-.01em;
+}
+.marquee__group b{ opacity:.5; font-weight:400; }
+@keyframes slide{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
 /* ---------- Manifiesto ---------- */
 .manifiesto{ position:relative; padding:clamp(70px,10vw,130px) 0; overflow:hidden; }
@@ -412,6 +415,8 @@ a{ color:inherit; }
 
 /* ---------- Contexto ---------- */
 .contexto{ background:var(--azul); padding:clamp(70px,9vw,120px) 0; color:var(--crema); }
+/* Título largo: un punto menos para que cada línea entre entera. */
+.contexto .h-xl{ font-size:clamp(1.8rem, 4.1vw, 2.9rem); }
 .contexto__grid{ display:grid; gap:1px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); background:rgba(255,244,223,.14); border-radius:var(--radius); overflow:hidden; }
 .ctx{ background:var(--azul); padding:32px 28px; transition:background .35s var(--ease); }
 .ctx:hover{ background:#00293a; }
