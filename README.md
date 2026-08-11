@@ -20,7 +20,7 @@ web/
     ├── js/data.js         TODO el contenido (textos y cifras)
     ├── js/main.js         Interacciones, scroll, filtros
     ├── video/                   (ver "Videos" más abajo — no están en el repo)
-    │   ├── hero-loop.mp4        924 KB · 18s, muteado, en loop, sin subtítulos
+    │   ├── hero-loop.mp4        3 MB · 15s, muteado, en loop, sin subtítulos
     │   └── spot-1000-dias.mp4   13 MB · spot completo con audio (modal)
     └── img/hero-poster.jpg
 ```

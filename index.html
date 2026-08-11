@@ -146,7 +146,7 @@
 
     <div class="regiones__layout">
       <div class="regiones__list" id="regionesList" role="tablist" aria-label="Regiones"></div>
-      <div class="regiones__panel" id="regionesPanel" data-parallax="0.05"></div>
+      <div class="regiones__panel" id="regionesPanel"></div>
     </div>
   </div>
 </section>
@@ -174,7 +174,13 @@
   <div class="wrap">
     <p class="eyebrow reveal"><i class="tag tag--coral"></i>Cada obra tiene una razón</p>
     <h2 class="h-xl reveal">Cada razón<br><em class="c-coral">tiene un nombre.</em></h2>
-    <p class="razones__hint reveal">Deslizá para conocerlas →</p>
+    <div class="razones__head reveal">
+      <p class="razones__hint">Arrastrá para conocerlas</p>
+      <div class="razones__nav">
+        <button class="rnav" id="razonesPrev" aria-label="Anterior">←</button>
+        <button class="rnav" id="razonesNext" aria-label="Siguiente">→</button>
+      </div>
+    </div>
   </div>
   <div class="razones__rail" id="razonesRail"></div>
 </section>

@@ -350,6 +350,72 @@
     rail.appendChild(el);
   });
 
+  /* ---------------- Carrusel: arrastre y flechas ---------------- */
+  const prevBtn = $('#razonesPrev');
+  const nextBtn = $('#razonesNext');
+
+  function pasoRail() {
+    const card = rail.querySelector('.razon');
+    if (!card) return 340;
+    const gap = parseFloat(getComputedStyle(rail).gap) || 18;
+    return card.getBoundingClientRect().width + gap;
+  }
+
+  function actualizarFlechas() {
+    const max = rail.scrollWidth - rail.clientWidth;
+    prevBtn.disabled = rail.scrollLeft <= 2;
+    nextBtn.disabled = rail.scrollLeft >= max - 2;
+  }
+
+  prevBtn.addEventListener('click', () => { rail.scrollLeft -= pasoRail(); });
+  nextBtn.addEventListener('click', () => { rail.scrollLeft += pasoRail(); });
+  rail.addEventListener('scroll', actualizarFlechas, { passive: true });
+  actualizarFlechas();
+
+  // Arrastre con mouse/lápiz. En touch dejamos el scroll nativo.
+  let arrastrando = false, xInicial = 0, scrollInicial = 0, movido = 0;
+
+  rail.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
+    arrastrando = true;
+    movido = 0;
+    xInicial = e.clientX;
+    scrollInicial = rail.scrollLeft;
+    rail.classList.add('is-dragging');
+    rail.setPointerCapture(e.pointerId);
+  });
+
+  rail.addEventListener('pointermove', (e) => {
+    if (!arrastrando) return;
+    const delta = e.clientX - xInicial;
+    movido = Math.abs(delta);
+    rail.scrollLeft = scrollInicial - delta;
+  });
+
+  function soltar(e) {
+    if (!arrastrando) return;
+    arrastrando = false;
+    rail.classList.remove('is-dragging');
+    if (e.pointerId != null && rail.hasPointerCapture(e.pointerId)) {
+      rail.releasePointerCapture(e.pointerId);
+    }
+  }
+  rail.addEventListener('pointerup', soltar);
+  rail.addEventListener('pointercancel', soltar);
+  rail.addEventListener('pointerleave', soltar);
+  // Un arrastre no debe dispararse como clic.
+  rail.addEventListener('click', (e) => { if (movido > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+  // Rueda vertical → desplazamiento horizontal dentro del riel.
+  rail.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const max = rail.scrollWidth - rail.clientWidth;
+    const puede = (e.deltaY > 0 && rail.scrollLeft < max - 2) || (e.deltaY < 0 && rail.scrollLeft > 2);
+    if (!puede) return;
+    e.preventDefault();
+    rail.scrollLeft += e.deltaY;
+  }, { passive: false });
+
   /* ---------------- Modal del spot ---------------- */
   const modal = $('#modalSpot');
   const video = $('#spotVideo');
