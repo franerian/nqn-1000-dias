@@ -337,6 +337,17 @@
     video.pause();
   }
 
+  // Si el archivo del spot no está en el deploy, avisamos en vez de
+  // dejar un reproductor negro.
+  video.addEventListener('error', () => {
+    const box = video.parentNode;
+    if (box.querySelector('.modal__falta')) return;
+    const aviso = document.createElement('p');
+    aviso.className = 'modal__falta';
+    aviso.textContent = 'El spot todavía no está cargado en este deploy.';
+    box.appendChild(aviso);
+  });
+
   $$('[data-open-spot]').forEach((b) => b.addEventListener('click', openSpot));
   $('#modalClose').addEventListener('click', closeSpot);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeSpot(); });

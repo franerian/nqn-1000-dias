@@ -19,11 +19,31 @@ web/
     ├── css/style.css      Sistema visual completo
     ├── js/data.js         TODO el contenido (textos y cifras)
     ├── js/main.js         Interacciones, scroll, filtros
-    ├── video/
-    │   ├── hero-loop.mp4        4 MB · muteado, en loop, sin subtítulos (crop 72%)
+    ├── video/                   (ver "Videos" más abajo — no están en el repo)
+    │   ├── hero-loop.mp4        924 KB · 18s, muteado, en loop, sin subtítulos
     │   └── spot-1000-dias.mp4   13 MB · spot completo con audio (modal)
     └── img/hero-poster.jpg
 ```
+
+## Videos
+
+**Los dos .mp4 no están versionados** y hay que subirlos a mano a
+`assets/video/`. Mientras falten, el sitio funciona igual: el hero muestra
+`hero-poster.jpg` como imagen fija y el modal del spot avisa que todavía no
+está cargado.
+
+Los archivos ya generados están en la carpeta local del proyecto. Para subirlos:
+
+- **Por la web de GitHub:** botón *Add file → Upload files* (acepta hasta 25 MB
+  por archivo, alcanza para los dos).
+- **Por git, desde tu máquina:**
+
+  ```bash
+  git add assets/video && git commit -m "Agrega los videos" && git push
+  ```
+
+Para producción conviene servir `spot-1000-dias.mp4` (13 MB) desde un CDN,
+Vercel Blob o un embed de YouTube, en lugar del repo.
 
 **Para editar contenido no hace falta tocar HTML ni CSS: todo está en `assets/js/data.js`.**
 

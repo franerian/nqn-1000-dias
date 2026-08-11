@@ -1,4 +1,8 @@
 .DS_Store
+
+# Los videos se suben aparte (ver README). Quitá estas líneas cuando
+# los agregues al repo desde tu máquina.
+assets/video/*.mp4
 node_modules/
 .vercel
 *.log
