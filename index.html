@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1000 días. 1000 obras. 1000 razones. · Neuquén no para</title>
+<meta name="description" content="En solo 1000 días de gestión, pusimos 1000 obras en marcha. Un plan histórico de rutas, salud, educación, deportes, energía y saneamiento que ya impulsa el desarrollo de las 7 regiones de Neuquén.">
+<meta property="og:title" content="1000 días. 1000 obras. 1000 razones.">
+<meta property="og:description" content="Hay mil razones para seguir creciendo. Neuquén no para.">
+<meta property="og:image" content="assets/img/hero-poster.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============ PROGRESO + NAV ============ -->
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top">
+    <span class="nav__flip" aria-hidden="true">1000</span>
+    <span class="nav__brandtxt">días · obras · razones</span>
+  </a>
+  <nav class="nav__links" aria-label="Secciones">
+    <a href="#manifiesto">Manifiesto</a>
+    <a href="#cifras">Las cifras</a>
+    <a href="#explorar">Explorar obras</a>
+    <a href="#regiones">7 regiones</a>
+    <a href="#razones">Mil razones</a>
+  </nav>
+  <button class="nav__cta" data-open-spot>Ver el spot</button>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/img/hero-poster.jpg">
+    <source src="assets/video/hero-loop.mp4" type="video/mp4">
+  </video>
+  <div class="hero__scrim"></div>
+
+  <div class="hero__inner" data-parallax="0.14">
+    <p class="hero__kicker reveal">4 de septiembre de 2026 · el hito</p>
+
+    <h1 class="hero__title">
+      <span class="line reveal" style="--d:.05s"><em class="c-crema">Mil días.</em></span>
+      <span class="line reveal" style="--d:.18s"><em class="c-teal">Mil obras.</em></span>
+      <span class="line reveal" style="--d:.31s"><em class="c-coral">Mil razones.</em></span>
+    </h1>
+
+    <p class="hero__sub reveal" style="--d:.45s">
+      Puede que haya mil formas de contar mil días.<br>
+      Pero no se trata de números. Se trata de razones.
+    </p>
+
+    <div class="hero__actions reveal" style="--d:.6s">
+      <a class="btn btn--coral" href="#explorar">Explorar las obras</a>
+      <button class="btn btn--ghost" data-open-spot>
+        <span class="btn__play" aria-hidden="true">▶</span> Ver el spot
+      </button>
+    </div>
+  </div>
+
+  <div class="hero__cue" aria-hidden="true"><span></span></div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Mil días.</span><b>·</b><span>Mil obras.</span><b>·</b><span>Mil razones.</span><b>·</b>
+    <span>Neuquén no para.</span><b>·</b>
+    <span>Mil días.</span><b>·</b><span>Mil obras.</span><b>·</b><span>Mil razones.</span><b>·</b>
+    <span>Neuquén no para.</span><b>·</b>
+  </div>
+</div>
+
+<!-- ============ MANIFIESTO ============ -->
+<section class="manifiesto" id="manifiesto">
+  <div class="blob blob--verde" data-parallax="-0.12"></div>
+  <div class="blob blob--coral" data-parallax="0.08"></div>
+
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--coral"></i>El punto de partida</p>
+    <h2 class="h-xl reveal">Las obras emocionan cuando<br><em class="c-coral">le cambian la vida a la gente.</em></h2>
+
+    <div class="manifiesto__body" id="manifiestoBody"></div>
+
+    <div class="pill-quote reveal">
+      Esta campaña no cuenta sólo obras.<br>
+      Cuenta las <strong>mil formas en que la vida de los neuquinos empezó a cambiar</strong>.
+    </div>
+  </div>
+</section>
+
+<!-- ============ CIFRAS ============ -->
+<section class="cifras" id="cifras">
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--amarillo"></i>El hito, en números</p>
+    <h2 class="h-xl reveal">Es mucho más que un número.<br><em class="c-teal">Pero los números también están.</em></h2>
+    <div class="cifras__grid" id="cifrasGrid"></div>
+    <p class="fuente reveal">Fuente: Informe de Gestión Neuquén 2026.</p>
+  </div>
+</section>
+
+<!-- ============ EXPLORADOR ============ -->
+<section class="explorar" id="explorar">
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--teal"></i>Explorá la gestión</p>
+    <h2 class="h-xl reveal">Siete ejes.<br><em class="c-coral">Mil obras que se pueden mirar de cerca.</em></h2>
+
+    <div class="filtros reveal">
+      <div class="filtros__row">
+        <span class="filtros__label">Eje</span>
+        <div class="chips" id="chipsEje" role="group" aria-label="Filtrar por eje"></div>
+      </div>
+      <div class="filtros__row">
+        <span class="filtros__label">Estado</span>
+        <div class="chips" id="chipsEstado" role="group" aria-label="Filtrar por estado"></div>
+      </div>
+      <div class="filtros__meta">
+        <span id="contadorObras" class="contador">0</span>
+        <span class="contador__lbl">resultados</span>
+        <button class="linkbtn" id="limpiar" hidden>Limpiar filtros</button>
+      </div>
+    </div>
+
+    <div class="obras" id="obrasGrid" aria-live="polite"></div>
+    <p class="vacio" id="vacio" hidden>No hay obras que coincidan con esos filtros.</p>
+
+    <div class="plan reveal">
+      <h3 class="h-md">Plan de Obras Neuquén 2026</h3>
+      <p class="plan__intro">Estado de avance por rubro. Pasá el cursor sobre cada barra para ver el detalle.</p>
+      <div class="plan__list" id="planList"></div>
+      <div class="plan__legend">
+        <span><i class="dot dot--verde"></i>Finalizadas</span>
+        <span><i class="dot dot--amarillo"></i>En ejecución</span>
+        <span><i class="dot dot--coral"></i>A licitar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGIONES ============ -->
+<section class="regiones" id="regiones">
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--verde"></i>De toda la provincia, no de una capital</p>
+    <h2 class="h-xl reveal">Siete regiones.<br><em class="c-amarillo">Nadie queda afuera del relato.</em></h2>
+
+    <div class="regiones__layout">
+      <div class="regiones__list" id="regionesList" role="tablist" aria-label="Regiones"></div>
+      <div class="regiones__panel" id="regionesPanel" data-parallax="0.05"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANTES / DESPUÉS ============ -->
+<section class="cambios" id="cambios">
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--coral"></i>Lo que encontramos → lo que hicimos</p>
+    <h2 class="h-xl reveal">Neuquén tenía que crecer<br><em class="c-teal">para lo que se viene.</em></h2>
+    <div class="cambios__grid" id="cambiosGrid"></div>
+  </div>
+</section>
+
+<!-- ============ CONTEXTO ============ -->
+<section class="contexto" id="contexto">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--light reveal"><i class="tag tag--verde"></i>Desde el inicio de la gestión</p>
+    <h2 class="h-xl h-xl--light reveal">La provincia con <em class="c-verde">más actividad económica,<br>más empleo privado y más empresas.</em></h2>
+    <div class="contexto__grid" id="contextoGrid"></div>
+  </div>
+</section>
+
+<!-- ============ MIL RAZONES ============ -->
+<section class="razones" id="razones">
+  <div class="wrap">
+    <p class="eyebrow reveal"><i class="tag tag--coral"></i>Cada obra tiene una razón</p>
+    <h2 class="h-xl reveal">Cada razón<br><em class="c-coral">tiene un nombre.</em></h2>
+    <p class="razones__hint reveal">Deslizá para conocerlas →</p>
+  </div>
+  <div class="razones__rail" id="razonesRail"></div>
+</section>
+
+<!-- ============ CIERRE ============ -->
+<section class="cierre" id="cierre">
+  <div class="cierre__inner">
+    <h2 class="cierre__claim">
+      <span class="reveal" style="--d:.05s">Mil días.</span>
+      <span class="reveal" style="--d:.15s">Mil obras.</span>
+      <span class="reveal" style="--d:.25s">Mil razones.</span>
+    </h2>
+    <p class="cierre__firma reveal" style="--d:.4s">Neuquén no para.</p>
+    <p class="cierre__txt reveal" style="--d:.5s">
+      La gestión no para porque hay gente que necesita<br>y merece una Neuquén mejor.
+    </p>
+    <div class="cierre__actions reveal" style="--d:.6s">
+      <button class="btn btn--coral" data-open-spot><span class="btn__play" aria-hidden="true">▶</span> Ver el spot completo</button>
+      <a class="btn btn--ghost" href="https://neuquen.gob.ar" target="_blank" rel="noopener">neuquen.gob.ar</a>
+    </div>
+  </div>
+  <footer class="foot">
+    <p>Gobierno de la Provincia del Neuquén</p>
+    <p class="foot__note">Datos: Informe de Gestión Neuquén 2026. Versión de trabajo para validación de contenido y diseño.</p>
+  </footer>
+</section>
+
+<!-- ============ MODAL SPOT ============ -->
+<div class="modal" id="modalSpot" hidden>
+  <button class="modal__close" id="modalClose" aria-label="Cerrar">✕</button>
+  <div class="modal__box">
+    <video id="spotVideo" controls playsinline preload="none" poster="assets/img/hero-poster.jpg">
+      <source src="assets/video/spot-1000-dias.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
