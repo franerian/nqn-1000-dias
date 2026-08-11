@@ -84,6 +84,43 @@ a{ color:inherit; }
 }
 .js .reveal.is-in{ opacity:1; transform:none; }
 
+/* ---------- Acceso provisorio ---------- */
+.gate{
+  position:fixed; inset:0; z-index:200;
+  display:grid; place-items:center; padding:24px;
+  background:var(--azul); color:var(--crema);
+}
+.gate::after{
+  content:''; position:absolute; right:-180px; bottom:-180px;
+  width:520px; height:520px; border-radius:50%; background:var(--teal); opacity:.22;
+}
+html.unlocked .gate{ display:none; }
+html:not(.unlocked) body{ overflow:hidden; }
+
+.gate__box{
+  position:relative; z-index:2; width:min(100%, 460px); text-align:center;
+}
+.gate__logo{
+  display:inline-block; background:var(--coral); color:var(--crema);
+  font-weight:800; font-size:1.3rem; letter-spacing:.06em;
+  padding:6px 14px; border-radius:10px; margin-bottom:26px;
+}
+.gate__title{
+  font-size:clamp(1.5rem,4vw,2.1rem); font-weight:800;
+  letter-spacing:-.02em; line-height:1.15; margin:0 0 12px;
+}
+.gate__txt{ opacity:.7; font-size:.92rem; margin:0 0 28px; }
+.gate__row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.gate__input{
+  flex:1 1 220px; min-width:0;
+  background:rgba(255,244,223,.1); border:2px solid rgba(255,244,223,.25);
+  border-radius:999px; padding:13px 22px;
+  color:var(--crema); font:inherit; font-size:.95rem;
+  transition:border-color .25s var(--ease), background .25s;
+}
+.gate__input::placeholder{ color:rgba(255,244,223,.45); }
+.gate__input:focus{ outline:none; border-color:var(--teal); background:rgba(255,244,223,.16); }
+
 /* ---------- Progreso + Nav ---------- */
 .progress{
   position:fixed; inset:0 0 auto 0; height:3px; z-index:60;

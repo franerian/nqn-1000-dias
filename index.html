@@ -12,8 +12,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script>
+  // Si ya entró en esta pestaña, no volvemos a pedir la clave.
+  try {
+    if (sessionStorage.getItem('nqn1000') === 'ok') {
+      document.documentElement.classList.add('unlocked');
+    }
+  } catch (e) {}
+</script>
 </head>
 <body>
+
+<!-- ============ ACCESO (provisorio) ============ -->
+<div class="gate" id="gate">
+  <form class="gate__box" id="gateForm" autocomplete="off">
+    <span class="gate__logo">1000</span>
+    <h1 class="gate__title">Mil días. Mil obras. Mil razones.</h1>
+    <p class="gate__txt">Vista previa privada. Ingresá la clave de acceso.</p>
+    <div class="gate__row">
+      <input class="gate__input" id="gateInput" type="password" placeholder="Clave" aria-label="Clave de acceso" autofocus>
+      <button class="btn btn--coral" type="submit">Entrar</button>
+    </div>
+  </form>
+</div>
 
 <!-- ============ PROGRESO + NAV ============ -->
 <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
@@ -217,6 +238,29 @@
     </video>
   </div>
 </div>
+
+<script>
+  // Acceso provisorio: puro cliente, no protege nada de verdad.
+  (function () {
+    var CLAVE = 'NQN';
+    var gate = document.getElementById('gate');
+    var form = document.getElementById('gateForm');
+    var input = document.getElementById('gateInput');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (input.value === CLAVE) {
+        try { sessionStorage.setItem('nqn1000', 'ok'); } catch (err) {}
+        document.documentElement.classList.add('unlocked');
+        gate.remove();
+        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('scroll'));
+      } else {
+        window.location.replace('https://www.google.com');
+      }
+    });
+  })();
+</script>
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
