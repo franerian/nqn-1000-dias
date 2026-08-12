@@ -581,6 +581,20 @@ html:not(.unlocked) body{ overflow:hidden; }
 .foot__note{ font-weight:400 !important; opacity:.45; font-size:.76rem !important; margin-top:6px !important; }
 
 /* ---------- Modal ---------- */
+/* ---------- Contador: solo la franja central, a todo el ancho ----------
+   El video es 16:9 pero el contenido vive entre el 39% y el 63% del alto.
+   Recortamos a una franja de 567 px (52,5% del cuadro) con el centro
+   corrido al 52,5%, que es donde está el eje real de las tarjetas. */
+.contador-film{
+  width:100%; aspect-ratio:1920 / 567;
+  overflow:hidden; background:#01a6b0;   /* el turquesa del propio video */
+  line-height:0;
+}
+.contador-film video{
+  width:100%; height:100%;
+  object-fit:cover; object-position:50% 52.5%;
+}
+
 /* ---------- Secciones de video ---------- */
 .film{ background:var(--azul); color:var(--crema); padding:clamp(60px,8vw,100px) 0; }
 .h-md--light{ color:var(--crema); }
