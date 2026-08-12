@@ -208,25 +208,115 @@
   const nombreEstado = (id) => (ESTADOS.find((e) => e.id === id) || {}).nombre || '';
   const nombreRegion = (id) => (REGIONES.find((r) => r.id === id) || {}).nombre || '';
 
+  /* Contexto de la tarjeta: a qué plan pertenece la cifra y cuánto
+     representa dentro de ese total. Sin esto, "56 km" o "141 km"
+     quedan sueltos y pierden el sentido que tienen en el informe. */
+  const ORDEN_ESTADOS = ['finalizada', 'ejecucion', 'licitar'];
+  // Género de la unidad, para que el texto concuerde: "los 403 km en
+  // ejecución", "las 3.296 soluciones finalizadas".
+  const FEMENINO = { obras: true, soluciones: true };
+  const art = (u) => (FEMENINO[u] ? 'las' : 'los');
+  const etiquetaEstado = (id, u) => {
+    if (id === 'finalizada') return FEMENINO[u] ? 'finalizadas' : 'finalizados';
+    return nombreEstado(id).charAt(0).toLowerCase() + nombreEstado(id).slice(1);
+  };
+
+  function contextoObra(o) {
+    if (o.programa && PROGRAMAS[o.programa]) {
+      const p = PROGRAMAS[o.programa];
+      // Tarjeta de plan completo: la etapa que se resalta es la que el
+      // usuario tenga filtrada; sin filtro, se muestran las tres.
+      const esPlan = !!o.estados;
+      const resalta = esPlan
+        ? (state.estado !== 'todos' ? state.estado : null)
+        : (o.parteDe || o.estado);
+      return {
+        titulo: esPlan ? 'Avance del plan' : p.nombre,
+        plan: esPlan ? p.plan : p.nombre + ' · ' + p.plan,
+        total: p.total, unidad: p.unidad,
+        partes: p.partes, resalta: resalta, dentroDe: o.parteDe || null,
+        propio: o.parteDe ? o.dato : null, nota: p.nota, esPlan: esPlan
+      };
+    }
+    if (o.rubro) {
+      const r = PLAN_OBRAS.find((x) => x.rubro === o.rubro);
+      if (!r) return null;
+      return {
+        titulo: r.rubro, plan: 'Plan de Obras Neuquén 2026', total: r.total, unidad: 'obras',
+        partes: { finalizada: r.finalizada, ejecucion: r.ejecucion, licitar: r.licitar },
+        resalta: o.resalta || null, dentroDe: null, propio: null, nota: ''
+      };
+    }
+    return null;
+  }
+
+  function ctxHTML(o) {
+    const c = contextoObra(o);
+    if (!c) return '';
+
+    const segs = ORDEN_ESTADOS.map((id) => {
+      const v = c.partes[id] || 0;
+      const on = !c.resalta || c.resalta === id;
+      return '<span class="obra__seg obra__seg--' + id + (on ? ' is-on' : '') + '"' +
+             ' style="width:' + (v / c.total * 100).toFixed(2) + '%"' +
+             ' title="' + nf.format(v) + ' ' + c.unidad + ' ' + etiquetaEstado(id, c.unidad) + '"></span>';
+    }).join('');
+
+    const detalle = ORDEN_ESTADOS
+      .filter((id) => (c.partes[id] || 0) > 0)
+      .map((id) => nf.format(c.partes[id]) + ' ' + etiquetaEstado(id, c.unidad))
+      .join(' · ');
+
+    let lead;
+    if (c.dentroDe) {
+      lead = '<strong>' + c.propio + ' ' + c.unidad + '</strong> dentro de ' + art(c.unidad) + ' ' +
+             nf.format(c.partes[c.dentroDe]) + ' ' + c.unidad + ' ' + etiquetaEstado(c.dentroDe, c.unidad);
+    } else if (c.esPlan) {
+      const id = c.resalta || 'finalizada';
+      lead = '<strong>' + nf.format(c.partes[id]) + ' de ' + nf.format(c.total) + ' ' + c.unidad + '</strong> ' +
+             etiquetaEstado(id, c.unidad);
+    } else if (c.resalta) {
+      lead = '<strong>' + nf.format(c.partes[c.resalta]) + '</strong> de ' + nf.format(c.total) + ' ' + c.unidad;
+    } else {
+      lead = '<strong>' + nf.format(c.total) + ' ' + c.unidad + '</strong> en total';
+    }
+
+    return '<div class="obra__ctx">' +
+        '<p class="obra__ctxtit">' + c.titulo +
+          (c.esPlan ? '' : ' · ' + nf.format(c.total) + ' ' + c.unidad) +
+          (c.plan ? '<span>' + c.plan + '</span>' : '') + '</p>' +
+        '<div class="obra__bar" role="img" aria-label="' + detalle + ' sobre ' + nf.format(c.total) + ' ' + c.unidad + '">' + segs + '</div>' +
+        '<p class="obra__ctxtxt">' + lead + '</p>' +
+        '<p class="obra__ctxdet">' + detalle + (c.nota ? ' · ' + c.nota : '') + '</p>' +
+      '</div>';
+  }
+
+  // Una tarjeta de plan abarca las tres etapas: aparece con cualquier
+  // filtro de estado y muestra resaltada la que se esté mirando.
+  const estadosDe = (o) => o.estados || [o.estado];
+
   function render() {
     const list = OBRAS.filter((o) =>
       (state.eje === 'todos' || o.eje === state.eje) &&
-      (state.estado === 'todos' || o.estado === state.estado)
+      (state.estado === 'todos' || estadosDe(o).indexOf(state.estado) !== -1)
     );
 
     grid.innerHTML = '';
     list.forEach((o, i) => {
       const el = document.createElement('article');
-      el.className = 'obra obra--' + colorEje(o.eje);
+      el.className = 'obra obra--' + colorEje(o.eje) + (o.estados ? ' obra--plan' : '');
       el.style.animationDelay = Math.min(i * 0.035, 0.4) + 's';
       el.innerHTML =
         '<div class="obra__top">' +
           '<span class="obra__eje">' + nombreEje(o.eje) + '</span>' +
-          '<span class="obra__estado est--' + o.estado + '">' + nombreEstado(o.estado) + '</span>' +
+          (o.estados
+            ? '<span class="obra__estado est--plan">Plan completo</span>'
+            : '<span class="obra__estado est--' + o.estado + '">' + nombreEstado(o.estado) + '</span>') +
         '</div>' +
         '<p class="obra__dato">' + o.dato + '<small>' + o.unidad + '</small></p>' +
         '<h3 class="obra__titulo">' + o.titulo + '</h3>' +
         '<p class="obra__detalle">' + o.detalle + '</p>' +
+        ctxHTML(o) +
         (o.region ? '<span class="obra__region">' + nombreRegion(o.region) + '</span>' : '');
       grid.appendChild(el);
     });
@@ -416,31 +506,204 @@
     rail.scrollLeft += e.deltaY;
   }, { passive: false });
 
+  /* ---------------- Reproductores de YouTube con UI propia ----------------
+     Cargamos el iframe con controls=0 y montamos encima nuestros propios
+     controles, para que el reproductor no traiga la interfaz de YouTube.
+     Los de la página arrancan en mute (única forma de que el navegador
+     permita el autoplay) y el usuario decide si activa el sonido. */
+  const SVG = {
+    play:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.4v14H7zm6.6 0H17v14h-3.4z"/></svg>',
+    on:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.6v12.8L7.6 14.5H4zm11.4-.8a4.4 4.4 0 0 1 0 6.6l-1.2-1.3a2.7 2.7 0 0 0 0-4zM17.6 6a7.4 7.4 0 0 1 0 12l-1.2-1.3a5.7 5.7 0 0 0 0-9.4z"/></svg>',
+    off:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.6v12.8L7.6 14.5H4zm11 .1 1.3-1.3 2 2 2-2 1.3 1.3-2 2 2 2-1.3 1.3-2-2-2 2-1.3-1.3 2-2z"/></svg>',
+    full:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM4 15h2v3h3v2H4zm14 0h2v5h-5v-2h3z"/></svg>'
+  };
+
+  let apiPedida = false, apiLista = false;
+  const enCola = [];
+
+  function cuandoYT(cb) {
+    if (apiLista) return cb();
+    enCola.push(cb);
+    if (apiPedida) return;
+    apiPedida = true;
+    window.onYouTubeIframeAPIReady = function () {
+      apiLista = true;
+      enCola.splice(0).forEach((f) => f());
+    };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+  }
+
+  const mmss = (s) => {
+    if (!isFinite(s) || s < 0) s = 0;
+    const m = Math.floor(s / 60);
+    return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  };
+
+  let nPlayer = 0;
+
+  function montarPlayer(cont) {
+    const videoId = cont.dataset.yt;
+    const conSonido = cont.dataset.sonido === '1';   // el modal arranca con audio
+    const uid = 'yt-' + (++nPlayer);
+
+    cont.innerHTML =
+      '<div class="player__frame"><div id="' + uid + '"></div></div>' +
+      '<button class="player__big" type="button" aria-label="Reproducir">' + SVG.play + '</button>' +
+      '<div class="player__ui">' +
+        '<button class="pbtn" type="button" data-act="play" aria-label="Pausar">' + SVG.pause + '</button>' +
+        '<div class="player__track" data-act="seek" role="slider" tabindex="0" aria-label="Progreso del video"' +
+             ' aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="player__fill"></span></div>' +
+        '<span class="player__time">0:00</span>' +
+        '<button class="pbtn" type="button" data-act="mute" aria-label="Activar sonido">' + SVG.off + '</button>' +
+        '<button class="pbtn" type="button" data-act="full" aria-label="Pantalla completa">' + SVG.full + '</button>' +
+      '</div>' +
+      (conSonido ? '' : '<button class="player__sonido" type="button">' + SVG.on + ' Activar sonido</button>');
+
+    const frame  = $('.player__frame', cont);
+    const big    = $('.player__big', cont);
+    const bPlay  = $('[data-act="play"]', cont);
+    const bMute  = $('[data-act="mute"]', cont);
+    const track  = $('.player__track', cont);
+    const fill   = $('.player__fill', cont);
+    const tiempo = $('.player__time', cont);
+    const pill   = $('.player__sonido', cont);
+
+    let yt = null, timer = null, pausadoAMano = false;
+    // Estado propio: isMuted() del iframe tarda en reflejar el cambio.
+    let muteado = !conSonido;
+
+    const estaMuteado = () => muteado;
+
+    function pintarSonido() {
+      const m = estaMuteado();
+      bMute.innerHTML = m ? SVG.off : SVG.on;
+      bMute.setAttribute('aria-label', m ? 'Activar sonido' : 'Silenciar');
+      cont.classList.toggle('has-audio', !m);
+    }
+
+    function pintarTiempo() {
+      if (!yt || !yt.getDuration) return;
+      const d = yt.getDuration() || 0;
+      const t = yt.getCurrentTime() || 0;
+      const p = d ? (t / d) * 100 : 0;
+      fill.style.width = p + '%';
+      track.setAttribute('aria-valuenow', Math.round(p));
+      tiempo.textContent = mmss(t) + ' / ' + mmss(d);
+    }
+
+    function correr(on) {
+      clearInterval(timer);
+      if (on) timer = setInterval(pintarTiempo, 250);
+    }
+
+    cuandoYT(() => {
+      yt = new YT.Player(uid, {
+        videoId: videoId,
+        host: 'https://www.youtube-nocookie.com',
+        playerVars: {
+          autoplay: 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1,
+          rel: 0, playsinline: 1, iv_load_policy: 3,
+          loop: conSonido ? 0 : 1, playlist: videoId
+        },
+        events: {
+          onReady: function () {
+            if (conSonido) { yt.unMute(); } else { yt.mute(); }
+            pintarSonido();
+            pintarTiempo();
+            cont.classList.add('is-ready');
+            if (!conSonido && !reduce) verSiSeVe();
+          },
+          onStateChange: function (e) {
+            const yendo = e.data === YT.PlayerState.PLAYING;
+            cont.classList.toggle('is-playing', yendo);
+            bPlay.innerHTML = yendo ? SVG.pause : SVG.play;
+            bPlay.setAttribute('aria-label', yendo ? 'Pausar' : 'Reproducir');
+            correr(yendo);
+            pintarTiempo();
+          }
+        }
+      });
+    });
+
+    /* Reproducción según visibilidad: arranca cuando entra en pantalla y
+       se detiene al salir, salvo que el usuario lo haya pausado a mano. */
+    function verSiSeVe() {
+      if (!yt || !yt.getPlayerState) return;
+      const r = cont.getBoundingClientRect();
+      const visible = r.top < window.innerHeight * 0.75 && r.bottom > window.innerHeight * 0.25;
+      const estado = yt.getPlayerState();
+      if (visible && !pausadoAMano && estado !== YT.PlayerState.PLAYING) yt.playVideo();
+      if (!visible && estado === YT.PlayerState.PLAYING) yt.pauseVideo();
+    }
+    if (!conSonido) window.addEventListener('scroll', verSiSeVe, { passive: true });
+
+    function alternar() {
+      if (!yt || !yt.getPlayerState) return;
+      if (yt.getPlayerState() === YT.PlayerState.PLAYING) { pausadoAMano = true; yt.pauseVideo(); }
+      else { pausadoAMano = false; yt.playVideo(); }
+    }
+
+    frame.addEventListener('click', alternar);
+    big.addEventListener('click', alternar);
+    bPlay.addEventListener('click', alternar);
+
+    function sonido() {
+      if (!yt) return;
+      if (muteado) { yt.unMute(); yt.setVolume(100); muteado = false; }
+      else { yt.mute(); muteado = true; }
+      pintarSonido();
+    }
+    bMute.addEventListener('click', sonido);
+    if (pill) pill.addEventListener('click', () => { sonido(); if (yt) yt.playVideo(); });
+
+    $('[data-act="full"]', cont).addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (cont.requestFullscreen) cont.requestFullscreen();
+    });
+
+    function buscar(clientX) {
+      if (!yt || !yt.getDuration) return;
+      const r = track.getBoundingClientRect();
+      const p = Math.min(Math.max((clientX - r.left) / r.width, 0), 1);
+      yt.seekTo(p * yt.getDuration(), true);
+      pintarTiempo();
+    }
+    track.addEventListener('click', (e) => { e.stopPropagation(); buscar(e.clientX); });
+    track.addEventListener('keydown', (e) => {
+      if (!yt || !yt.getCurrentTime) return;
+      if (e.key === 'ArrowRight') { yt.seekTo(yt.getCurrentTime() + 5, true); pintarTiempo(); }
+      if (e.key === 'ArrowLeft')  { yt.seekTo(Math.max(0, yt.getCurrentTime() - 5), true); pintarTiempo(); }
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); alternar(); }
+    });
+
+    return {
+      play:  () => { pausadoAMano = false; if (yt && yt.playVideo) yt.playVideo(); },
+      pause: (aMano) => { if (aMano) pausadoAMano = true; if (yt && yt.pauseVideo) yt.pauseVideo(); }
+    };
+  }
+
+  const players = {};
+  $$('.player[data-yt]').forEach((cont) => { players[cont.id || cont.dataset.yt] = montarPlayer(cont); });
+
   /* ---------------- Modal del spot ---------------- */
   const modal = $('#modalSpot');
-  const video = $('#spotVideo');
+  const spot = players.playerModal;
 
   function openSpot() {
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
-    video.play().catch(() => {});
+    // Nada de dos audios a la vez: los de la página se detienen.
+    Object.keys(players).forEach((k) => { if (k !== 'playerModal') players[k].pause(true); });
+    if (spot) spot.play();
   }
   function closeSpot() {
     modal.hidden = true;
     document.body.style.overflow = '';
-    video.pause();
+    if (spot) spot.pause();
   }
-
-  // Si el archivo del spot no está en el deploy, avisamos en vez de
-  // dejar un reproductor negro.
-  video.addEventListener('error', () => {
-    const box = video.parentNode;
-    if (box.querySelector('.modal__falta')) return;
-    const aviso = document.createElement('p');
-    aviso.className = 'modal__falta';
-    aviso.textContent = 'El spot todavía no está cargado en este deploy.';
-    box.appendChild(aviso);
-  });
 
   $$('[data-open-spot]').forEach((b) => b.addEventListener('click', openSpot));
   $('#modalClose').addEventListener('click', closeSpot);

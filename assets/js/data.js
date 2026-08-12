@@ -76,17 +76,53 @@ const PLAN_OBRAS = [
   { rubro: 'Viviendas',              eje: 'viviendas',  total: 200, licitar: 42, ejecucion: 46, finalizada: 112 }
 ];
 
-/* ---------- Tarjetas del explorador: hechos verificables ---------- */
+/* ---------- Programas: el todo al que pertenece cada cifra ----------
+   Las láminas del informe muestran cada número dentro de su plan
+   (56 km sobre 1.000, 141 km sobre 650, etc.). Sin ese marco la
+   tarjeta suelta pierde sentido, así que cada obra que forma parte
+   de un plan mayor apunta acá con `programa` (o `parteDe`, cuando es
+   un tramo dentro de una de las etapas).                            */
+const PROGRAMAS = {
+  pavimentacion: {
+    nombre: 'Pavimentación nueva',
+    plan: 'Plan Vial Neuquén 2026',
+    total: 1000, unidad: 'km',
+    partes: { finalizada: 56, ejecucion: 403, licitar: 541 },
+    nota: 'Sobre los 1.050 km que existían en toda la historia de la provincia: la red llega a 2.050 km.'
+  },
+  repavimentacion: {
+    nombre: 'Repavimentación de la red existente',
+    plan: 'Plan Vial Neuquén 2026',
+    total: 650, unidad: 'km',
+    partes: { finalizada: 141, ejecucion: 104, licitar: 405 },
+    nota: 'Sobre la red que ya existía. Los 1.000 km nuevos son los que llevan el total a 2.050 km.'
+  },
+  habita: {
+    nombre: 'Neuquén Habita',
+    plan: 'Soluciones habitacionales',
+    total: 32449, unidad: 'soluciones',
+    partes: { finalizada: 3296, ejecucion: 7387, licitar: 21766 },
+    nota: 'Medición a 183 días del lanzamiento del programa.'
+  },
+  saludm2: {
+    nombre: 'Obra de salud',
+    plan: 'Metros cuadrados de salud',
+    total: 102215, unidad: 'm²',
+    partes: { finalizada: 14215, ejecucion: 46000, licitar: 42000 },
+    nota: 'El Hospital Norpatagónico aporta 42.000 m²: en 2026 arrancan los primeros 10.000.'
+  }
+};
+
+/* ---------- Tarjetas del explorador: hechos verificables ----------
+   `programa`  → la cifra es una de las etapas del plan.
+   `parteDe`   → la cifra es un tramo dentro de esa etapa.
+   `rubro`     → el desglose sale de PLAN_OBRAS; `resalta` marca la etapa. */
 const OBRAS = [
   // RUTAS Y CONECTIVIDAD
-  { eje: 'rutas', estado: 'finalizada', region: null, titulo: '56 km de rutas nuevas pavimentadas', dato: '56', unidad: 'km', detalle: 'Primeros tramos finalizados del plan de 1.000 km de pavimentación nueva.' },
-  { eje: 'rutas', estado: 'ejecucion', region: null, titulo: 'Pavimentación en ejecución', dato: '403', unidad: 'km', detalle: 'Obra en marcha sobre el plan de pavimentación de 1.000 km.' },
-  { eje: 'rutas', estado: 'licitar', region: null, titulo: 'Pavimentación a licitar y ejecutar', dato: '541', unidad: 'km', detalle: 'Tramos restantes del Plan Vial Neuquén 2026.' },
-  { eje: 'rutas', estado: 'finalizada', region: null, titulo: 'Repavimentación finalizada', dato: '141', unidad: 'km', detalle: 'Sobre las 650 km de la red existente a repavimentar.' },
-  { eje: 'rutas', estado: 'ejecucion', region: null, titulo: 'Repavimentación en ejecución', dato: '104', unidad: 'km', detalle: 'Recuperación de la red vial provincial heredada.' },
-  { eje: 'rutas', estado: 'licitar', region: null, titulo: 'Repavimentación a licitar', dato: '405', unidad: 'km', detalle: 'Completa las 650 km de repavimentación previstas.' },
-  { eje: 'rutas', estado: 'ejecucion', region: 'lagos', titulo: 'Lagos del Sur: RP 60, 61, 62, 63, 65 y 23', dato: '117', unidad: 'km', detalle: 'RP60: 12 km · RP61: 9 km · RP62: 6 km · RP63: 19 km · RP65-T1: 34 km · RP23-T3: 37 km.' },
-  { eje: 'rutas', estado: 'finalizada', region: 'lagos', titulo: 'RP 23 — tramo finalizado', dato: '16', unidad: 'km', detalle: 'Primer tramo terminado del corredor de los Lagos del Sur.' },
+  { eje: 'rutas', estados: ['finalizada', 'ejecucion', 'licitar'], region: null, titulo: '1.000 km de rutas nuevas', programa: 'pavimentacion', dato: '1.000', unidad: 'km', detalle: 'En toda su historia Neuquén había pavimentado 1.050 km. El plan suma otros 1.000: la red pasa a 2.050 km.' },
+  { eje: 'rutas', estados: ['finalizada', 'ejecucion', 'licitar'], region: null, titulo: '650 km de rutas repavimentadas', programa: 'repavimentacion', dato: '650', unidad: 'km', detalle: 'Recuperación de la red heredada: no suma kilómetros nuevos, pone en condiciones los que ya existían.' },
+  { eje: 'rutas', estado: 'ejecucion', region: 'lagos', titulo: 'Lagos del Sur: RP 60, 61, 62, 63, 65 y 23', programa: 'pavimentacion', parteDe: 'ejecucion', dato: '117', unidad: 'km', detalle: 'RP60: 12 km · RP61: 9 km · RP62: 6 km · RP63: 19 km · RP65-T1: 34 km · RP23-T3: 37 km.' },
+  { eje: 'rutas', estado: 'finalizada', region: 'lagos', titulo: 'RP 23 — tramo finalizado', programa: 'pavimentacion', parteDe: 'finalizada', dato: '16', unidad: 'km', detalle: 'Primer tramo terminado del corredor de los Lagos del Sur.' },
   { eje: 'rutas', estado: 'ejecucion', region: 'confluencia', titulo: 'Duplicación de calzada RP67', dato: '19', unidad: 'km', detalle: 'Tramo RN22 / RP51, más conexión RP67–RP7 y cruces a distinto nivel.' },
   { eje: 'rutas', estado: 'ejecucion', region: 'confluencia', titulo: 'Duplicación RN22 y accesos', dato: '3,5', unidad: 'km', detalle: 'Vinculación ex Bajada de Capex, accesos y vinculaciones.' },
   { eje: 'rutas', estado: 'licitar', region: null, titulo: 'Corredores bioceánicos', dato: '2', unidad: 'pasos', detalle: 'Pichachén (RP6) y Pino Hachado (RN22), hacia los puertos del Atlántico y las regiones chilenas del Biobío, Araucanía, Los Ríos y Los Lagos.' },
@@ -97,29 +133,26 @@ const OBRAS = [
   { eje: 'educacion', estado: 'finalizada', region: null, titulo: 'Establecimientos construidos, ampliados o refaccionados', dato: '+70', unidad: 'edificios', detalle: '100.000 m² de obra nueva, de los cuales 65.000 m² en escuelas técnicas.' },
   { eje: 'educacion', estado: 'finalizada', region: null, titulo: 'Becas Gregorio Álvarez', dato: '19.000', unidad: 'estudiantes', detalle: '$38.315 millones invertidos, partiendo de cero becados.' },
   { eje: 'educacion', estado: 'finalizada', region: null, titulo: 'Plan Pehuén', dato: '16.000', unidad: 'millones $', detalle: 'Inversión donde antes no había ninguna.' },
-  { eje: 'educacion', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Educación', dato: '117', unidad: 'obras', detalle: '38 finalizadas · 54 en ejecución · 25 a licitar.' },
-  { eje: 'educacion', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Deportes', dato: '33', unidad: 'obras', detalle: '4 finalizadas · 11 en ejecución · 18 a licitar.' },
+  { eje: 'educacion', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Educación', rubro: 'Educación', dato: '117', unidad: 'obras', detalle: 'Obras de infraestructura escolar en toda la provincia.' },
+  { eje: 'educacion', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Deportes', rubro: 'Deportes', dato: '33', unidad: 'obras', detalle: 'Infraestructura deportiva en toda la provincia.' },
 
   // VIVIENDAS E INFRAESTRUCTURA
-  { eje: 'viviendas', estado: 'finalizada', region: null, titulo: 'Soluciones habitacionales finalizadas', dato: '3.296', unidad: 'soluciones', detalle: 'A 183 días del lanzamiento de Neuquén Habita (5 de diciembre de 2025).' },
-  { eje: 'viviendas', estado: 'ejecucion', region: null, titulo: 'Soluciones habitacionales en ejecución', dato: '7.387', unidad: 'soluciones', detalle: 'Obra en marcha en toda la provincia.' },
-  { eje: 'viviendas', estado: 'licitar', region: null, titulo: 'Soluciones habitacionales en gestión', dato: '21.766', unidad: 'soluciones', detalle: 'Total del programa: 32.449 soluciones habitacionales.' },
+  { eje: 'viviendas', estados: ['finalizada', 'ejecucion', 'licitar'], region: null, titulo: '32.449 soluciones habitacionales', programa: 'habita', dato: '32.449', unidad: 'soluciones', detalle: 'Programa Neuquén Habita, lanzado el 5 de diciembre de 2025.' },
   { eje: 'viviendas', estado: 'ejecucion', region: null, titulo: 'Inversión en vivienda', dato: 'U$D 450', unidad: 'millones', detalle: 'Créditos hipotecarios no bancarios del gobierno provincial.' },
-  { eje: 'viviendas', estado: 'finalizada', region: null, titulo: 'Obras de vivienda finalizadas', dato: '112', unidad: 'obras', detalle: '409 viviendas y 864 obras de infraestructura de servicios.' },
+  { eje: 'viviendas', estado: 'finalizada', region: null, titulo: 'Obras de vivienda finalizadas', rubro: 'Viviendas', resalta: 'finalizada', dato: '112', unidad: 'obras', detalle: '409 viviendas y 864 obras de infraestructura de servicios.' },
 
   // SALUD
-  { eje: 'salud', estado: 'finalizada', region: null, titulo: 'Obra de salud inaugurada', dato: '14.215', unidad: 'm²', detalle: 'Superficie ya en funcionamiento.' },
-  { eje: 'salud', estado: 'ejecucion', region: null, titulo: 'Obra de salud en ejecución', dato: '+46.000', unidad: 'm²', detalle: 'En total: 102.215 m² entre lo hecho, lo que se está haciendo y lo que viene.' },
-  { eje: 'salud', estado: 'licitar', region: null, titulo: 'Hospital Norpatagónico', dato: '+42.000', unidad: 'm²', detalle: 'En 2026 iniciamos con los primeros 10.000 m².' },
+  { eje: 'salud', estados: ['finalizada', 'ejecucion', 'licitar'], region: null, titulo: '102.215 m² de obra en salud', programa: 'saludm2', dato: '102.215', unidad: 'm²', detalle: 'Entre lo que ya está en funcionamiento, lo que se está construyendo y lo que viene.' },
+  { eje: 'salud', estado: 'licitar', region: null, titulo: 'Hospital Norpatagónico', programa: 'saludm2', dato: '+42.000', unidad: 'm²', detalle: 'En 2026 iniciamos con los primeros 10.000 m².' },
   { eje: 'salud', estado: 'finalizada', region: 'centro', titulo: 'Nuevo Centro de Salud de Zapala', dato: '1', unidad: 'centro', detalle: 'Había mil razones para que Ayelén trabajara en su ciudad.' },
-  { eje: 'salud', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Salud', dato: '51', unidad: 'obras', detalle: '11 finalizadas · 16 en ejecución · 24 a licitar.' },
+  { eje: 'salud', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Salud', rubro: 'Salud', dato: '51', unidad: 'obras', detalle: 'Centros de salud y hospitales en toda la provincia.' },
 
   // AGUA Y ENERGÍA
   { eje: 'agua', estado: 'ejecucion', region: null, titulo: 'Potabilización y tratamiento', dato: '$200.000', unidad: 'millones', detalle: 'Inversión en agua potable y saneamiento.' },
-  { eje: 'agua', estado: 'finalizada', region: 'alto', titulo: 'Plan Integral de Gas', dato: '21', unidad: 'obras', detalle: 'Gas natural para zonas rurales y cordilleranas. 15 obras finalizadas, 6 en ejecución.' },
+  { eje: 'agua', estado: 'finalizada', region: 'alto', titulo: 'Plan Integral de Gas', rubro: 'Gas', dato: '21', unidad: 'obras', detalle: 'Gas natural para zonas rurales y cordilleranas.' },
   { eje: 'agua', estado: 'finalizada', region: null, titulo: 'Red de alta tensión', dato: '245', unidad: 'km', detalle: 'U$D 153 millones invertidos.' },
-  { eje: 'agua', estado: 'finalizada', region: null, titulo: 'Obras de luz finalizadas', dato: '97', unidad: 'obras', detalle: 'Sobre un total de 141 obras del rubro.' },
-  { eje: 'agua', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Agua', dato: '83', unidad: 'obras', detalle: '34 finalizadas · 32 en ejecución · 17 a licitar.' },
+  { eje: 'agua', estado: 'finalizada', region: null, titulo: 'Obras de luz finalizadas', rubro: 'Luz', resalta: 'finalizada', dato: '97', unidad: 'obras', detalle: 'Redes y obras eléctricas en toda la provincia.' },
+  { eje: 'agua', estado: 'ejecucion', region: null, titulo: 'Plan de obras de Agua', rubro: 'Agua', dato: '83', unidad: 'obras', detalle: 'Agua potable y saneamiento en toda la provincia.' },
 
   // SEGURIDAD
   { eje: 'seguridad', estado: 'finalizada', region: null, titulo: 'Móviles policiales incorporados', dato: '350', unidad: 'móviles', detalle: '240 blindados. Otros 359 en proceso de adquisición.' },
