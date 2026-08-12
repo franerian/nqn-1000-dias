@@ -431,8 +431,17 @@
     const el = document.createElement('article');
     el.className = 'razon reveal';
     el.style.setProperty('--d', (i * 0.05) + 's');
+    // El retrato tapa la inicial dentro del mismo círculo. Si la imagen
+    // falta o falla, se quita sola y queda la letra: la tarjeta nunca
+    // muestra un ícono roto. Decorativo: el nombre va escrito debajo.
     el.innerHTML =
-      '<span class="razon__ini" aria-hidden="true">' + r.nombre.replace('Don ', '').charAt(0) + '</span>' +
+      '<span class="razon__av" aria-hidden="true">' +
+        r.nombre.replace('Don ', '').charAt(0) +
+        (r.foto
+          ? '<img class="razon__foto" src="' + r.foto + '" alt="" loading="lazy" ' +
+            'decoding="async" width="54" height="54" onerror="this.remove()">'
+          : '') +
+      '</span>' +
       '<h3 class="razon__nombre">' + r.nombre + '</h3>' +
       '<p class="razon__meta">' + r.edad + ' · ' + r.lugar + '</p>' +
       '<p class="razon__frase">' + r.frase + '</p>' +

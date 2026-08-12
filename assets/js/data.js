@@ -202,13 +202,13 @@ const CONTEXTO = [
 
 /* ---------- Las mil razones: historias de la campaña ---------- */
 const RAZONES = [
-  { nombre: 'Rosa',        edad: '72 años', lugar: 'Las Ovejas · Alto Neuquén', eje: 'agua',       frase: 'Cortó leña hasta los setenta y dos. Hoy gira la perilla y la llama azul se enciende.', razon: 'Había mil razones para llevar el gas natural al Alto Neuquén.' },
-  { nombre: 'Camila',      edad: '19 años', lugar: 'Junín de los Andes · Lagos del Sur', eje: 'educacion', frase: 'Este año está en la universidad. Es una de las 19.000 becadas.', razon: 'Había mil razones para contar con las Becas Gregorio Álvarez.' },
-  { nombre: 'Marta',       edad: '38 años', lugar: 'Neuquén Capital · Confluencia', eje: 'viviendas', frase: 'Alquiló toda su vida. Este año giró la llave de una puerta que por fin es suya.', razon: 'Había mil razones para entregar las casas del Barrio Z1.' },
-  { nombre: 'Nelson',      edad: 'Transportista', lugar: 'Región del Pehuén', eje: 'rutas',     frase: 'Trabaja al volante. Ahora la ruta está asfaltada.', razon: 'Había mil razones para asfaltar las rutas del Pehuén.' },
-  { nombre: 'Ayelén',      edad: 'Enfermera', lugar: 'Zapala · Zona Centro', eje: 'salud',       frase: 'Se pone el guardapolvo y camina segura por el pasillo de su ciudad.', razon: 'Había mil razones para tener el nuevo Centro de Salud de Zapala.' },
-  { nombre: 'Don Ernesto', edad: 'Comerciante', lugar: 'Comarca Petrolera', eje: 'seguridad',    frase: 'Llega de madrugada, sube la persiana y abre tranquilo.', razon: 'Había mil razones para más equipamiento y más presencia policial.' },
-  { nombre: 'Marcos',      edad: 'Trabajador petrolero', lugar: 'Añelo · Vaca Muerta', eje: 'vacamuerta', frase: 'Llega a su casa, prende la hornalla y ceba un mate con su hija.', razon: 'Había mil razones para el bypass, el gas y las rutas de Vaca Muerta.' }
+  { nombre: 'Rosa', foto: 'assets/img/razones/rosa.jpg',        edad: '72 años', lugar: 'Las Ovejas · Alto Neuquén', eje: 'agua',       frase: 'Cortó leña hasta los setenta y dos. Hoy gira la perilla y la llama azul se enciende.', razon: 'Había mil razones para llevar el gas natural al Alto Neuquén.' },
+  { nombre: 'Camila', foto: 'assets/img/razones/camila.jpg',      edad: '19 años', lugar: 'Junín de los Andes · Lagos del Sur', eje: 'educacion', frase: 'Este año está en la universidad. Es una de las 19.000 becadas.', razon: 'Había mil razones para contar con las Becas Gregorio Álvarez.' },
+  { nombre: 'Marta', foto: 'assets/img/razones/marta.jpg',       edad: '38 años', lugar: 'Neuquén Capital · Confluencia', eje: 'viviendas', frase: 'Alquiló toda su vida. Este año giró la llave de una puerta que por fin es suya.', razon: 'Había mil razones para entregar las casas del Barrio Z1.' },
+  { nombre: 'Nelson', foto: 'assets/img/razones/nelson.jpg',      edad: 'Transportista', lugar: 'Región del Pehuén', eje: 'rutas',     frase: 'Trabaja al volante. Ahora la ruta está asfaltada.', razon: 'Había mil razones para asfaltar las rutas del Pehuén.' },
+  { nombre: 'Ayelén', foto: 'assets/img/razones/ayelen.jpg',      edad: 'Enfermera', lugar: 'Zapala · Zona Centro', eje: 'salud',       frase: 'Se pone el guardapolvo y camina segura por el pasillo de su ciudad.', razon: 'Había mil razones para tener el nuevo Centro de Salud de Zapala.' },
+  { nombre: 'Don Ernesto', foto: 'assets/img/razones/ernesto.jpg', edad: 'Comerciante', lugar: 'Comarca Petrolera', eje: 'seguridad',    frase: 'Llega de madrugada, sube la persiana y abre tranquilo.', razon: 'Había mil razones para más equipamiento y más presencia policial.' },
+  { nombre: 'Marcos', foto: 'assets/img/razones/marcos.jpg',      edad: 'Trabajador petrolero', lugar: 'Añelo · Vaca Muerta', eje: 'vacamuerta', frase: 'Llega a su casa, prende la hornalla y ceba un mate con su hija.', razon: 'Había mil razones para el bypass, el gas y las rutas de Vaca Muerta.' }
 ];
 
 /* ---------- Manifiesto ---------- */
