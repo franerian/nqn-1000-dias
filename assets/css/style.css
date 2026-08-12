@@ -597,9 +597,8 @@ html:not(.unlocked) body{ overflow:hidden; }
 
 /* ---------- Secciones de video ---------- */
 .film{ background:var(--azul); color:var(--crema); padding:clamp(60px,8vw,100px) 0; }
-.h-md--light{ color:var(--crema); }
-.film .h-md{ margin-bottom:26px; }
-.film .h-md em{ font-style:normal; }
+/* Un poco más ajustado que en el resto: abajo viene el reproductor. */
+.film .h-xl{ margin-block:.15em .55em; }
 
 /* ---------- Reproductor con UI propia ---------- */
 .player{
