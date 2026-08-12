@@ -560,6 +560,7 @@
 
     cont.innerHTML =
       '<div class="player__frame"><div id="' + uid + '"></div></div>' +
+      '<span class="player__load" aria-hidden="true"></span>' +
       '<button class="player__big" type="button" aria-label="Reproducir">' + SVG.play + '</button>' +
       '<div class="player__ui">' +
         '<button class="pbtn" type="button" data-act="play" aria-label="Pausar">' + SVG.pause + '</button>' +
@@ -613,6 +614,9 @@
       if (on) timer = setInterval(pintarTiempo, 250);
     }
 
+    // Hasta que el iframe diga lo contrario, damos por hecho que carga.
+    cont.classList.add('is-loading');
+
     cuandoYT(() => {
       yt = new YT.Player(uid, {
         videoId: videoId,
@@ -632,6 +636,13 @@
           },
           onStateChange: function (e) {
             const yendo = e.data === YT.PlayerState.PLAYING;
+            // Mientras carga o no arrancó, YouTube muestra su miniatura y su
+            // botón gigante: lo tapamos del todo y no ponemos el nuestro,
+            // así el arranque no parece un video pausado.
+            cont.classList.toggle('is-loading',
+              e.data === YT.PlayerState.BUFFERING ||
+              e.data === YT.PlayerState.UNSTARTED ||
+              e.data === YT.PlayerState.CUED);
             cont.classList.toggle('is-playing', yendo);
             bPlay.innerHTML = yendo ? SVG.pause : SVG.play;
             bPlay.setAttribute('aria-label', yendo ? 'Pausar' : 'Reproducir');

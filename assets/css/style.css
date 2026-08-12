@@ -607,19 +607,34 @@ html:not(.unlocked) body{ overflow:hidden; }
   background:rgba(0,41,58,0); backdrop-filter:blur(0);
   transition:background .35s var(--ease), backdrop-filter .35s var(--ease);
 }
+/* Casi opaco: si se transparenta, asoma la miniatura y el botón rojo de
+   YouTube, que es justo lo que no queremos ver. */
 .player:not(.is-playing) .player__frame::after{
-  background:rgba(0,41,58,.62); backdrop-filter:blur(16px);
+  background:rgba(0,41,58,.94); backdrop-filter:blur(24px);
 }
 
+/* Anillo de carga: ocupa el lugar del botón mientras el video arranca. */
+.player__load{
+  position:absolute; inset:0; z-index:2; margin:auto;
+  width:30px; height:30px; border-radius:50%;
+  border:2px solid rgba(255,244,223,.22); border-top-color:var(--coral);
+  opacity:0; pointer-events:none; transition:opacity .25s var(--ease);
+}
+.player.is-loading:not(.is-playing) .player__load{ opacity:1; animation:girar .8s linear infinite; }
+@keyframes girar{ to{ transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce){ .player__load{ animation:none !important; } }
+
 .player__big{
-  position:absolute; inset:0; z-index:2; margin:auto; width:78px; height:78px;
+  position:absolute; inset:0; z-index:2; margin:auto; width:62px; height:62px;
   display:grid; place-items:center; border:0; cursor:pointer;
   background:rgba(255,244,223,.92); color:var(--azul); border-radius:50%;
   opacity:0; transform:scale(.85); pointer-events:none;
   transition:opacity .3s var(--ease), transform .3s var(--ease);
 }
-.player__big svg{ width:32px; height:32px; fill:currentColor; margin-left:3px; }
+.player__big svg{ width:26px; height:26px; fill:currentColor; margin-left:3px; }
 .player:not(.is-playing).is-ready .player__big{ opacity:1; transform:none; pointer-events:auto; }
+/* Mientras carga manda el anillo, no el botón. */
+.player.is-loading .player__big{ opacity:0; transform:scale(.85); pointer-events:none; }
 
 .player__ui{
   position:absolute; left:0; right:0; bottom:0; z-index:3;
@@ -713,11 +728,11 @@ html:not(.unlocked) body{ overflow:hidden; }
    Las medidas salen de la posición real del hueco en la imagen. */
 .fono{
   position:relative;
-  width:min(115vw, 940px);
-  margin-left:clamp(-320px, -22vw, -120px);
+  width:min(135vw, 1150px);
+  margin-left:clamp(-560px, -34vw, -210px);
 }
 /* Entra deslizándose desde el costado, no desde abajo como el resto. */
-.js .fono.reveal{ transform:translateX(-90px); }
+.js .fono.reveal{ transform:translateX(-120px); }
 .js .fono.reveal.is-in{ transform:none; }
 .fono__mano{
   position:relative; z-index:2; width:100%; height:auto; display:block;
@@ -735,8 +750,9 @@ html:not(.unlocked) body{ overflow:hidden; }
   width:116.31%; left:-8.16%; height:300%; top:-100%;
 }
 .fono .player__ui{ display:none; }          /* adentro del teléfono la barra sobra */
-.fono .player__big{ width:52px; height:52px; }
-.fono .player__big svg{ width:20px; height:20px; }
+.fono .player__big{ width:46px; height:46px; }
+.fono .player__big svg{ width:18px; height:18px; }
+.fono .player__load{ width:24px; height:24px; }
 .fono .player__sonido{
   top:auto; bottom:14px; left:50%; right:auto; transform:translateX(-50%);
   padding:7px 13px; font-size:.68rem; gap:6px;
@@ -745,7 +761,7 @@ html:not(.unlocked) body{ overflow:hidden; }
 .fono .player__sonido svg{ width:13px; height:13px; }
 
 @media (max-width:820px){
-  .fono{ width:min(140vw, 620px); margin-left:clamp(-190px, -26vw, -90px); }
+  .fono{ width:min(160vw, 560px); margin-left:clamp(-260px, -36vw, -110px); }
 }
 
 .modal{
