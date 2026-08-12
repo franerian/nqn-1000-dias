@@ -274,8 +274,6 @@ html:not(.unlocked) body{ overflow:hidden; }
   font-size:clamp(1rem,1.7vw,1.2rem); max-width:62ch;
   box-shadow:var(--shadow);
 }
-/* Sin color: el remarcado lo hace el peso, no el amarillo. */
-.pill-quote strong{ color:inherit; }
 
 /* ---------- Cifras ---------- */
 .cifras{ background:var(--crema-2); padding:clamp(70px,9vw,120px) 0; }
