@@ -1,7 +1,7 @@
 /* =============================================================
    1000 días · 1000 obras · 1000 razones
    Fuente de datos — Informe de Gestión Neuquén 2026 (V17 27/07)
-   y presentación creativa "Neuquén no para".
+   y presentación creativa de la campaña.
 
    IMPORTANTE: todas las cifras de este archivo provienen del
    material entregado. No hay datos inventados. El listado

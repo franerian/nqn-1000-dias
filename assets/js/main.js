@@ -567,6 +567,7 @@
              ' aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="player__fill"></span></div>' +
         '<span class="player__time">0:00</span>' +
         '<button class="pbtn" type="button" data-act="mute" aria-label="Activar sonido">' + SVG.off + '</button>' +
+        '<input class="player__vol" type="range" min="0" max="100" step="1" value="100" aria-label="Volumen">' +
         '<button class="pbtn" type="button" data-act="full" aria-label="Pantalla completa">' + SVG.full + '</button>' +
       '</div>' +
       (conSonido ? '' : '<button class="player__sonido" type="button">' + SVG.on + ' Activar sonido</button>');
@@ -575,6 +576,7 @@
     const big    = $('.player__big', cont);
     const bPlay  = $('[data-act="play"]', cont);
     const bMute  = $('[data-act="mute"]', cont);
+    const vol    = $('.player__vol', cont);
     const track  = $('.player__track', cont);
     const fill   = $('.player__fill', cont);
     const tiempo = $('.player__time', cont);
@@ -591,6 +593,9 @@
       bMute.innerHTML = m ? SVG.off : SVG.on;
       bMute.setAttribute('aria-label', m ? 'Activar sonido' : 'Silenciar');
       cont.classList.toggle('has-audio', !m);
+      // El relleno del slider se dibuja con una variable CSS; en mute
+      // queda vacío aunque el valor siga guardado.
+      cont.style.setProperty('--vol', (m ? 0 : vol.value) + '%');
     }
 
     function pintarTiempo() {
@@ -661,11 +666,26 @@
 
     function sonido() {
       if (!yt) return;
-      if (muteado) { yt.unMute(); yt.setVolume(100); muteado = false; }
-      else { yt.mute(); muteado = true; }
+      if (muteado) {
+        // Si venía del slider en cero, al desmutear se sube a un valor
+        // audible en vez de quedarse en silencio con el ícono prendido.
+        if (parseInt(vol.value, 10) === 0) vol.value = 100;
+        yt.unMute(); yt.setVolume(parseInt(vol.value, 10)); muteado = false;
+      } else { yt.mute(); muteado = true; }
       pintarSonido();
     }
     bMute.addEventListener('click', sonido);
+
+    // Mover el slider desmutea solo; llevarlo a cero silencia.
+    vol.addEventListener('input', () => {
+      if (!yt || !yt.setVolume) return;
+      const v = parseInt(vol.value, 10);
+      if (v > 0 && muteado) { yt.unMute(); muteado = false; }
+      if (v === 0 && !muteado) { yt.mute(); muteado = true; }
+      yt.setVolume(v);
+      pintarSonido();
+    });
+    vol.addEventListener('click', (e) => e.stopPropagation());
     if (pill) pill.addEventListener('click', () => { sonido(); if (yt) yt.playVideo(); });
 
     $('[data-act="full"]', cont).addEventListener('click', () => {

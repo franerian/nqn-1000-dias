@@ -57,7 +57,7 @@ Vercel Blob o un embed de YouTube, en lugar del repo.
 6. **Antes / después** — lo que encontramos → lo que hicimos
 7. **Contexto económico** — PBG, empleo, exportaciones
 8. **Mil razones** — carrusel con las historias (Rosa, Camila, Marta, Nelson, Ayelén, Don Ernesto, Marcos)
-9. **Cierre** — firma "Neuquén no para"
+9. **Cierre** — firma "Hay mil razones para seguir"
 
 ## Sobre los datos
 
