@@ -726,13 +726,17 @@ html:not(.unlocked) body{ overflow:hidden; }
 /* El PNG de la mano tiene la pantalla calada: el reproductor va detrás y
    asoma por el hueco, así los dedos que pisan el borde quedan encima.
    Las medidas salen de la posición real del hueco en la imagen. */
+/* Sin margen negativo: el brazo apoya en el borde de la pantalla (que es
+   donde la foto lo corta) y el teléfono queda hacia el centro. El tope de
+   105vw sale de que el teléfono termina al 90,5% del ancho de la imagen:
+   más grande que eso y se saldría por la derecha. */
 .fono{
   position:relative;
-  width:min(135vw, 1150px);
-  margin-left:clamp(-560px, -34vw, -210px);
+  width:min(105vw, 1250px);
+  margin-left:0;
 }
 /* Entra deslizándose desde el costado, no desde abajo como el resto. */
-.js .fono.reveal{ transform:translateX(-120px); }
+.js .fono.reveal{ transform:translateX(-90px); }
 .js .fono.reveal.is-in{ transform:none; }
 .fono__mano{
   position:relative; z-index:2; width:100%; height:auto; display:block;
@@ -760,9 +764,8 @@ html:not(.unlocked) body{ overflow:hidden; }
 .fono .player__sonido:hover{ transform:translateX(-50%) translateY(-2px); }
 .fono .player__sonido svg{ width:13px; height:13px; }
 
-@media (max-width:820px){
-  .fono{ width:min(160vw, 560px); margin-left:clamp(-260px, -36vw, -110px); }
-}
+/* La regla de arriba ya sirve en cualquier ancho: no hace falta un
+   quiebre aparte para mobile. */
 
 .modal{
   position:fixed; inset:0; z-index:100;
