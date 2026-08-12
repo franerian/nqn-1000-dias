@@ -557,7 +557,12 @@ html:not(.unlocked) body{ overflow:hidden; }
 }
 
 /* ---------- Cierre ---------- */
-.cierre{ background:var(--azul); color:var(--crema); padding:clamp(80px,11vw,150px) 0 0; position:relative; overflow:hidden; }
+/* El aire de abajo lo daba el footer; sin él, va en el propio padding. */
+.cierre{
+  background:var(--azul); color:var(--crema);
+  padding:clamp(80px,11vw,150px) 0 clamp(80px,10vw,130px);
+  position:relative; overflow:hidden;
+}
 .cierre::after{
   content:''; position:absolute; right:-160px; top:-160px;
   width:520px; height:520px; border-radius:50%; background:var(--teal); opacity:.28;
@@ -575,13 +580,6 @@ html:not(.unlocked) body{ overflow:hidden; }
 .cierre__txt{ opacity:.75; margin:0 auto; max-width:44ch; }
 .cierre__actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:38px; }
 
-.foot{
-  position:relative; z-index:2; margin-top:clamp(60px,8vw,100px);
-  border-top:1px solid rgba(255,244,223,.15);
-  padding:30px clamp(20px,4vw,40px); text-align:center;
-}
-.foot p{ margin:0; font-weight:700; font-size:.9rem; }
-.foot__note{ font-weight:400 !important; opacity:.45; font-size:.76rem !important; margin-top:6px !important; }
 
 /* ---------- Modal ---------- */
 /* ---------- Contador: solo la franja central, a todo el ancho ----------
