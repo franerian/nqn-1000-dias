@@ -581,13 +581,27 @@ html:not(.unlocked) body{ overflow:hidden; }
   position:relative; aspect-ratio:16/9; background:#000;
   border-radius:var(--radius-sm); overflow:hidden; box-shadow:var(--shadow);
 }
-.player__frame{ position:absolute; inset:0; }
-.player__frame iframe, .player__frame > div{ width:100%; height:100%; border:0; display:block; }
-/* Tapa el área de los controles nativos: la UI es la nuestra. */
-.player__frame::after{ content:''; position:absolute; inset:0; }
+/* El iframe va tres veces más alto que la caja y desplazado hacia arriba:
+   el video se sigue ajustando al ancho, así que no se recorta imagen, pero
+   la franja donde YouTube pone título, avatar del canal, "compartir" y su
+   marca de agua queda fuera del área visible. */
+.player__frame{ position:absolute; inset:0; overflow:hidden; }
+.player__frame iframe, .player__frame > div{
+  position:absolute; left:0; top:-100%; width:100%; height:300%; border:0; display:block;
+}
+/* Capa propia: bloquea el hover y el clic sobre el iframe (sin ella
+   YouTube muestra su interfaz) y hace de velo cuando está pausado. */
+.player__frame::after{
+  content:''; position:absolute; inset:0; z-index:1;
+  background:rgba(0,41,58,0); backdrop-filter:blur(0);
+  transition:background .35s var(--ease), backdrop-filter .35s var(--ease);
+}
+.player:not(.is-playing) .player__frame::after{
+  background:rgba(0,41,58,.62); backdrop-filter:blur(16px);
+}
 
 .player__big{
-  position:absolute; inset:0; margin:auto; width:78px; height:78px;
+  position:absolute; inset:0; z-index:2; margin:auto; width:78px; height:78px;
   display:grid; place-items:center; border:0; cursor:pointer;
   background:rgba(255,244,223,.92); color:var(--azul); border-radius:50%;
   opacity:0; transform:scale(.85); pointer-events:none;
@@ -597,7 +611,7 @@ html:not(.unlocked) body{ overflow:hidden; }
 .player:not(.is-playing).is-ready .player__big{ opacity:1; transform:none; pointer-events:auto; }
 
 .player__ui{
-  position:absolute; left:0; right:0; bottom:0; z-index:2;
+  position:absolute; left:0; right:0; bottom:0; z-index:3;
   display:flex; align-items:center; gap:12px; padding:14px 16px;
   background:linear-gradient(to top, rgba(0,41,58,.85), rgba(0,41,58,0));
   opacity:0; transform:translateY(6px); transition:opacity .3s var(--ease), transform .3s var(--ease);
@@ -630,7 +644,7 @@ html:not(.unlocked) body{ overflow:hidden; }
 }
 
 .player__sonido{
-  position:absolute; top:16px; right:16px; z-index:3;
+  position:absolute; top:16px; right:16px; z-index:4;
   display:flex; align-items:center; gap:8px; cursor:pointer;
   border:0; border-radius:999px; padding:9px 16px;
   background:var(--coral); color:var(--crema);
