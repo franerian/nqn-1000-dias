@@ -568,7 +568,7 @@ html:not(.unlocked) body{ overflow:hidden; }
 .cierre__claim span{ display:block; }
 .cierre__claim span:nth-child(2){ color:var(--teal); }
 .cierre__claim span:nth-child(3){ color:var(--coral); }
-.cierre__firma{ font-size:clamp(1.6rem,4vw,2.6rem); font-weight:800; color:var(--verde); margin:34px 0 10px; letter-spacing:-.02em; }
+.cierre__firma{ font-size:clamp(1.6rem,4vw,2.6rem); font-weight:800; color:var(--crema); margin:34px 0 10px; letter-spacing:-.02em; }
 .cierre__txt{ opacity:.75; margin:0 auto; max-width:44ch; }
 .cierre__actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:38px; }
 
