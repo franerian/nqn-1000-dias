@@ -565,11 +565,15 @@ html:not(.unlocked) body{ overflow:hidden; }
   width:520px; height:520px; border-radius:50%; background:var(--teal); opacity:.28;
 }
 .cierre__inner{ position:relative; z-index:2; width:min(100% - 40px, var(--wrap)); margin-inline:auto; text-align:center; }
-.cierre__claim{ font-size:clamp(2.4rem,7vw,5rem); font-weight:800; letter-spacing:-.035em; line-height:1; margin:0; }
+/* La firma manda en el cierre: el claim queda como antesala. */
+.cierre__claim{ font-size:clamp(1.9rem,4.6vw,3.2rem); font-weight:800; letter-spacing:-.03em; line-height:1.04; margin:0; }
 .cierre__claim span{ display:block; }
 .cierre__claim span:nth-child(2){ color:var(--teal); }
 .cierre__claim span:nth-child(3){ color:var(--coral); }
-.cierre__firma{ font-size:clamp(1.6rem,4vw,2.6rem); font-weight:800; color:var(--crema); margin:34px 0 10px; letter-spacing:-.02em; }
+.cierre__firma{
+  font-size:clamp(2.8rem,8.4vw,5.8rem); font-weight:800; color:var(--crema);
+  margin:26px 0 14px; letter-spacing:-.035em; line-height:1;
+}
 .cierre__txt{ opacity:.75; margin:0 auto; max-width:44ch; }
 .cierre__actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:38px; }
 
